@@ -78,9 +78,13 @@ window.onload = function() {
    */
   function comeOutAndStop(hole, time) {
     hole.classList.add("up");
-    moleStay = setTimeout
+    moleStay = setTimeout(newHole(), time);
   }
-  function
+
+  function newHole {
+    hole.classList.add("down");
+    peep();
+  }
   /**
    * 打地鼠。为每个moles添加点击事件，点击后分数显示+1，地鼠入洞。
    */
