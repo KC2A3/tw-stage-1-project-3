@@ -8,6 +8,7 @@ window.onload = function() {
   let timeUp = false;
   let score = 0;
   let gameTime = 10000;
+  let previousHole = 0;
   startBtn.addEventListener('click', function() {
     showBtnAnimation();
     startGame();
@@ -63,8 +64,12 @@ window.onload = function() {
    * @returns {*}
    */
   function randomHole(holes) {
-    // TODO: 写地鼠随机选择钻出地洞的逻辑，如果与上一个是相同地洞，则重新选择一个地洞.
-    return null;
+    let outHole = Math.floor(Math.random() * 6 + 1);
+    if (outHole == previousHole) {
+      outHole = Math.floor(Math.random() * 6 + 1);
+    }
+    previousHole = outHole;
+    return holes[outHole];
   }
   /**
    * 地鼠出洞并停留相应时间，如果游戏时间未结束(timeUp)，继续出洞(peep).
