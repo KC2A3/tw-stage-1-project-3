@@ -8,6 +8,8 @@ window.onload = function() {
   let score = 0;
   let gameTime = 10000;
   let previousHole;
+  let moleStay;
+  let timeOver;
   startBtn.addEventListener('click', function() {
     showBtnAnimation();
     startGame();
@@ -25,8 +27,10 @@ window.onload = function() {
   function startGame() {
     resetScoreAndTime();
     peep();
-    setTimeout(() => {
-      // TODO: 写当游戏时间结束后要发生的事
+    timeOver = setTimeout(() => {
+      startBtn.innerText = "newgame";
+      timeUp = true;
+      clearTimeout(moleStay);
     }, gameTime)
   }
   /**
@@ -35,15 +39,19 @@ window.onload = function() {
   function resetScoreAndTime() {
     score = 0;
     scoreBoard.innerText = score;
+    clearTimeout(timeOver);
     timeUp = false;
   }
   /**
    * 出洞.
    */
   function peep() {
-    const time = randomTime(200, 1000);
-    const hole = randomHole(holes);
-    comeOutAndStop(hole, time);
+    if (!timeUp) {
+      clearTimeout(moleStay);
+      const time = randomTime(200, 1000);
+      const hole = randomHole(holes);
+      comeOutAndStop(hole, time);
+    }
   }
   /**
    * 随机生成地鼠出洞的停留时间. 该时间其实是[min, max]间的随机数.
@@ -53,8 +61,8 @@ window.onload = function() {
    * @returns {number}
    */
   function randomTime(min, max) {
-    var random = Math.floor(Math.random() * (max - min + 1) + min);
-    return random;
+    let time = Math.floor(Math.random() * (max - min + 1) + min);
+    return time;
   }
   /**
    * 随机选择地鼠钻出的地洞，如果与上一个是相同地洞，则重新选择一个地洞.
@@ -64,7 +72,7 @@ window.onload = function() {
    */
   function randomHole(holes) {
     let outHole = Math.floor(Math.random() * 6 + 1);
-    if (outHole == previousHole) {
+    if (outHole === previousHole) {
       outHole = Math.floor(Math.random() * 6 + 1);
     }
     previousHole = outHole;
@@ -81,18 +89,18 @@ window.onload = function() {
     moleStay = setTimeout(newHole(), time);
   }
 
-  function newHole {
-    hole.classList.add("down");
+  function newHole(hole) {
+    hole.classList.remove("up");
     peep();
   }
   /**
    * 打地鼠。为每个moles添加点击事件，点击后分数显示+1，地鼠入洞。
    */
   moles.forEach(mole => mole.addEventListener('click', function(e) {
-  let hole = holes[previousHole];
-  hole.classList.add("down");
-  score += 1;
-  scoreBoard.innerText = score;
-  peep();
+    let clickHole = holes[previousHole];
+    clickHole.classList.remove("up");
+    score += 1;
+    scoreBoard.innerText = score;
+    peep();
   }));
 };
