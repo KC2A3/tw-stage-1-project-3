@@ -4,11 +4,10 @@ window.onload = function() {
   const moles = document.querySelectorAll('.mole');
   const startBtn = document.getElementById('start_btn');
   let titleH1 = document.getElementById('title');
-  let lastHole;
   let timeUp = false;
   let score = 0;
   let gameTime = 10000;
-  let previousHole = 0;
+  let previousHole;
   startBtn.addEventListener('click', function() {
     showBtnAnimation();
     startGame();
@@ -78,8 +77,10 @@ window.onload = function() {
    * @param time 地鼠停留时间.
    */
   function comeOutAndStop(hole, time) {
-    // TODO: 写地鼠出洞并停留相应时间，如果游戏时间未结束(timeUp)，继续出洞(peep).
+    hole.classList.add("up");
+    moleStay = setTimeout
   }
+  function
   /**
    * 打地鼠。为每个moles添加点击事件，点击后分数显示+1，地鼠入洞。
    */
