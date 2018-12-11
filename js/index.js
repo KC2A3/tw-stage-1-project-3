@@ -33,18 +33,14 @@ window.onload = function() {
       clearTimeout(moleStay);
     }, gameTime)
   }
-  /**
-   * 初始化设置.
-   */
+
   function resetScoreAndTime() {
     score = 0;
     scoreBoard.innerText = score;
     clearTimeout(timeOver);
     timeUp = false;
   }
-  /**
-   * 出洞.
-   */
+
   function peep() {
     if (!timeUp) {
       clearTimeout(moleStay);
@@ -53,23 +49,12 @@ window.onload = function() {
       comeOutAndStop(hole, time);
     }
   }
-  /**
-   * 随机生成地鼠出洞的停留时间. 该时间其实是[min, max]间的随机数.
-   *
-   * @param min 随机数的下界.
-   * @param max 随机数的上界.
-   * @returns {number}
-   */
+
   function randomTime(min, max) {
     let time = Math.floor(Math.random() * (max - min + 1) + min);
     return time;
   }
-  /**
-   * 随机选择地鼠钻出的地洞，如果与上一个是相同地洞，则重新选择一个地洞.
-   *
-   * @param holes
-   * @returns {*}
-   */
+
   function randomHole(holes) {
     let outHole = Math.floor(Math.random() * 6 + 1);
     if (outHole === previousHole) {
@@ -78,24 +63,14 @@ window.onload = function() {
     previousHole = outHole;
     return holes[outHole];
   }
-  /**
-   * 地鼠出洞并停留相应时间，如果游戏时间未结束(timeUp)，继续出洞(peep).
-   *
-   * @param hole 地鼠所出地洞.
-   * @param time 地鼠停留时间.
-   */
+
   function comeOutAndStop(hole, time) {
     hole.classList.add("up");
-    moleStay = setTimeout(newHole(), time);
+    moleStay = setTimeout(function() {
+      hole.classList.remove("up");
+      peep();
+    }, time);
   }
-
-  function newHole(hole) {
-    hole.classList.remove("up");
-    peep();
-  }
-  /**
-   * 打地鼠。为每个moles添加点击事件，点击后分数显示+1，地鼠入洞。
-   */
   moles.forEach(mole => mole.addEventListener('click', function(e) {
     let clickHole = holes[previousHole];
     clickHole.classList.remove("up");
