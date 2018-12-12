@@ -7,9 +7,8 @@ window.onload = function() {
   let timeUp = false;
   let score = 0;
   let gameTime = 10000;
-  let previousHole;
+  let lastHole;
   let moleStay;
-  let timeOver;
   startBtn.addEventListener('click', function() {
     showBtnAnimation();
     startGame();
@@ -27,7 +26,7 @@ window.onload = function() {
   function startGame() {
     resetScoreAndTime();
     peep();
-    timeOver = setTimeout(() => {
+    setTimeout(() => {
       startBtn.innerText = "newgame";
       timeUp = true;
       clearTimeout(moleStay);
@@ -37,7 +36,6 @@ window.onload = function() {
   function resetScoreAndTime() {
     score = 0;
     scoreBoard.innerText = score;
-    clearTimeout(timeOver);
     timeUp = false;
   }
 
@@ -51,29 +49,36 @@ window.onload = function() {
   }
 
   function randomTime(min, max) {
-    let time = Math.floor(Math.random() * (max - min + 1) + min);
-    return time;
+    return time = Math.floor(Math.random() * (max - min + 1) + min);
   }
 
   function randomHole(holes) {
-    let outHole = Math.floor(Math.random() * 6 + 1);
-    if (outHole === previousHole) {
-      outHole = Math.floor(Math.random() * 6 + 1);
+    let outHole = Math.floor(Math.random() * (6 - 1 + 1) + 1);
+    if (outHole === lastHole) {
+      outHole = Math.floor(Math.random() * (6 - 1 + 1) + 1);
     }
-    previousHole = outHole;
+    lastHole = outHole;
     return holes[outHole];
   }
 
+  function holeup(hole) {
+    hole.classList.add('up');
+  }
+
+  function holedown(hole) {
+    hole.classList.remove('up');
+  }
+
   function comeOutAndStop(hole, time) {
-    hole.classList.add("up");
+    holeup();
     moleStay = setTimeout(function() {
-      hole.classList.remove("up");
+      holedown();
       peep();
     }, time);
   }
   moles.forEach(mole => mole.addEventListener('click', function(e) {
-    let clickHole = holes[previousHole];
-    clickHole.classList.remove("up");
+    let hole = holes[lastHole];
+    holedown();
     score += 1;
     scoreBoard.innerText = score;
     peep();
